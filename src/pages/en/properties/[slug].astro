@@ -26,7 +26,7 @@ const whatsappText = encodeURIComponent(`Hi! I'm interested in ${property.name.e
       />
       <div class="hero-overlay"></div>
       <div class="hero-text container">
-        <p class="location">📍 {property.location}</p>
+        <p class="location">{property.location}</p>
         <h1>{property.name[locale]}</h1>
         <p class="tagline">{property.tagline[locale]}</p>
       </div>
@@ -38,15 +38,12 @@ const whatsappText = encodeURIComponent(`Hi! I'm interested in ${property.name.e
       <div class="property-main">
         <div class="specs-bar">
           <div class="spec">
-            <span class="spec-icon">🛏</span>
             <span>{property.bedrooms} {t(locale, 'properties.bedrooms')}</span>
           </div>
           <div class="spec">
-            <span class="spec-icon">🚿</span>
             <span>{property.bathrooms} {t(locale, 'properties.bathrooms')}</span>
           </div>
           <div class="spec">
-            <span class="spec-icon">👥</span>
             <span>{property.maxGuests} {t(locale, 'properties.guests')}</span>
           </div>
         </div>

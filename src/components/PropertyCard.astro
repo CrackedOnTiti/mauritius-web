@@ -27,7 +27,7 @@ const heroImage = `/images/properties/${property.slug}/${property.images[0]}`;
 
   <div class="card-body">
     <div class="card-meta">
-      <span class="card-location">📍 {property.location}</span>
+      <span class="card-location">{property.location}</span>
       <span class="card-price">
         {t(locale, 'properties.from')}
         <strong>{property.pricePerNight}{property.currency === 'EUR' ? '€' : ' Rs'}</strong>
@@ -42,9 +42,9 @@ const heroImage = `/images/properties/${property.slug}/${property.images[0]}`;
     <p class="card-tagline">{property.tagline[locale]}</p>
 
     <div class="card-specs">
-      <span>🛏 {property.bedrooms} {t(locale, 'properties.bedrooms')}</span>
-      <span>🚿 {property.bathrooms} {t(locale, 'properties.bathrooms')}</span>
-      <span>👥 {property.maxGuests} {t(locale, 'properties.guests')}</span>
+      <span>{property.bedrooms} {t(locale, 'properties.bedrooms')}</span>
+      <span>{property.bathrooms} {t(locale, 'properties.bathrooms')}</span>
+      <span>{property.maxGuests} {t(locale, 'properties.guests')}</span>
     </div>
 
     <a href={`/${locale}/properties/${property.slug}/`} class="btn btn-primary card-cta">
@@ -79,13 +79,9 @@ const heroImage = `/images/properties/${property.slug}/${property.images[0]}`;
   }
 
   .card-image.no-image::after {
-    content: '🏡';
+    content: '';
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
   }
 
   .card-image img {
