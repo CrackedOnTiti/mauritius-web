@@ -1,0 +1,53 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PropertyCard from '../../../components/PropertyCard.astro';
+import { fetchProperties } from '../../../data/properties';
+import { t } from '../../../i18n/translations';
+
+const locale = 'fr';
+const properties = await fetchProperties();
+---
+
+<Layout locale={locale} title={t(locale, 'nav.properties')}>
+  <section class="page-hero">
+    <div class="container">
+      <h1>{t(locale, 'properties.title')}</h1>
+      <p>{t(locale, 'properties.subtitle')}</p>
+    </div>
+  </section>
+
+  <section class="properties-section">
+    <div class="container">
+      <div class="properties-grid">
+        {properties.map((p) => <PropertyCard property={p} locale={locale} />)}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    background: var(--color-bg-alt);
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .page-hero p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    max-width: 560px;
+  }
+
+  .properties-section { padding: 4rem 0 6rem; }
+
+  .properties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+</style>

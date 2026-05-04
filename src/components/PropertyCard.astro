@@ -1,0 +1,165 @@
+---
+import type { Property } from '../data/properties';
+import type { Locale } from '../i18n/translations';
+import { t } from '../i18n/translations';
+
+interface Props {
+  property: Property;
+  locale: Locale;
+}
+
+const { property, locale } = Astro.props;
+const heroImage = `/images/properties/${property.slug}/${property.images[0]}`;
+---
+
+<article class="property-card">
+  <a href={`/${locale}/properties/${property.slug}/`} class="card-image-link">
+    <div class="card-image">
+      <img
+        src={heroImage}
+        alt={property.name[locale]}
+        loading="lazy"
+        onerror="this.parentElement.classList.add('no-image')"
+      />
+      <div class="card-image-overlay"></div>
+    </div>
+  </a>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="card-location">📍 {property.location}</span>
+      <span class="card-price">
+        {t(locale, 'properties.from')}
+        <strong>{property.pricePerNight}{property.currency === 'EUR' ? '€' : ' Rs'}</strong>
+        {t(locale, 'properties.per_night')}
+      </span>
+    </div>
+
+    <h3 class="card-title">
+      <a href={`/${locale}/properties/${property.slug}/`}>{property.name[locale]}</a>
+    </h3>
+
+    <p class="card-tagline">{property.tagline[locale]}</p>
+
+    <div class="card-specs">
+      <span>🛏 {property.bedrooms} {t(locale, 'properties.bedrooms')}</span>
+      <span>🚿 {property.bathrooms} {t(locale, 'properties.bathrooms')}</span>
+      <span>👥 {property.maxGuests} {t(locale, 'properties.guests')}</span>
+    </div>
+
+    <a href={`/${locale}/properties/${property.slug}/`} class="btn btn-primary card-cta">
+      {t(locale, 'properties.cta')}
+    </a>
+  </div>
+</article>
+
+<style>
+  .property-card {
+    background: var(--color-white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card-image-link { display: block; }
+
+  .card-image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0e7490 0%, #164e63 100%);
+  }
+
+  .card-image.no-image::after {
+    content: '🏡';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .property-card:hover .card-image img { transform: scale(1.04); }
+
+  .card-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.15), transparent);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .card-location {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  .card-price {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .card-price strong {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .card-title a:hover { color: var(--color-primary); }
+
+  .card-tagline {
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .card-specs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+  }
+
+  .card-cta {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+</style>

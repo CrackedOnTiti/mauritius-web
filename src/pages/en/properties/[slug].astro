@@ -1,0 +1,240 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { fetchProperties, fetchPropertyBySlug } from '../../../data/properties';
+import { t } from '../../../i18n/translations';
+
+export async function getStaticPaths() {
+  const properties = await fetchProperties();
+  return properties.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const property = await fetchPropertyBySlug(slug!);
+if (!property) return Astro.redirect('/en/properties/');
+
+const locale = 'en';
+const whatsappText = encodeURIComponent(`Hi! I'm interested in ${property.name.en}. Could you give me more information?`);
+---
+
+<Layout locale={locale} title={property.name[locale]} description={property.tagline[locale]}>
+  <section class="property-hero">
+    <div class="property-hero-image">
+      <img
+        src={`/images/properties/${property.slug}/${property.images[0]}`}
+        alt={property.name[locale]}
+        onerror="this.parentElement.classList.add('no-image')"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-text container">
+        <p class="location">📍 {property.location}</p>
+        <h1>{property.name[locale]}</h1>
+        <p class="tagline">{property.tagline[locale]}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="property-body">
+    <div class="container property-grid">
+      <div class="property-main">
+        <div class="specs-bar">
+          <div class="spec">
+            <span class="spec-icon">🛏</span>
+            <span>{property.bedrooms} {t(locale, 'properties.bedrooms')}</span>
+          </div>
+          <div class="spec">
+            <span class="spec-icon">🚿</span>
+            <span>{property.bathrooms} {t(locale, 'properties.bathrooms')}</span>
+          </div>
+          <div class="spec">
+            <span class="spec-icon">👥</span>
+            <span>{property.maxGuests} {t(locale, 'properties.guests')}</span>
+          </div>
+        </div>
+
+        <div class="description">
+          <p>{property.description[locale]}</p>
+        </div>
+
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <ul class="amenities-list">
+            {property.amenities[locale].map((a) => (
+              <li>✓ {a}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <aside class="property-sidebar">
+        <div class="booking-card">
+          <div class="price-block">
+            <span class="price-from">{t(locale, 'properties.from')}</span>
+            <span class="price">
+              {property.pricePerNight}{property.currency === 'EUR' ? '€' : ' Rs'}
+            </span>
+            <span class="price-unit">{t(locale, 'properties.per_night')}</span>
+          </div>
+
+          <a
+            href={`https://wa.me/${import.meta.env.PUBLIC_WHATSAPP_NUMBER}?text=${whatsappText}`}
+            class="btn btn-whatsapp booking-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            {t(locale, 'contact.whatsapp')}
+          </a>
+
+          <a href="/en/contact/" class="btn btn-outline booking-btn">
+            {t(locale, 'contact.send')}
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .property-hero-image {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    background: linear-gradient(135deg, #0c4a6e, #0e7490);
+    overflow: hidden;
+  }
+
+  .property-hero-image.no-image img { display: none; }
+
+  .property-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 60%);
+  }
+
+  .hero-text {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    width: 100%;
+  }
+
+  .hero-text .location {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-text .tagline {
+    font-size: 1.05rem;
+    opacity: 0.9;
+  }
+
+  .property-body { padding: 3rem 0 5rem; }
+
+  .property-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .specs-bar {
+    display: flex;
+    gap: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+  }
+
+  .spec {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .spec-icon { font-size: 1.2rem; }
+
+  .description {
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+  }
+
+  .amenities h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .amenities-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .amenities-list li {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
+  .booking-card {
+    position: sticky;
+    top: 90px;
+    background: var(--color-white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+  }
+
+  .price-from { font-size: 0.9rem; color: var(--color-text-muted); }
+
+  .price {
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .price-unit { font-size: 0.9rem; color: var(--color-text-muted); }
+
+  .booking-btn { width: 100%; justify-content: center; }
+
+  @media (max-width: 900px) {
+    .property-grid { grid-template-columns: 1fr; }
+    .property-sidebar { order: -1; }
+    .booking-card { position: static; }
+    .amenities-list { grid-template-columns: 1fr; }
+  }
+</style>

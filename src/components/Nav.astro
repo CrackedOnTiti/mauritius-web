@@ -1,0 +1,174 @@
+---
+import type { Locale } from '../i18n/translations';
+import { t } from '../i18n/translations';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const otherLocale = locale === 'en' ? 'fr' : 'en';
+const currentPath = Astro.url.pathname;
+const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
+---
+
+<header class="nav-header">
+  <div class="container nav-inner">
+    <a href={`/${locale}/`} class="nav-logo">
+      <span class="logo-icon">🌊</span>
+      <span class="logo-text">{t(locale, 'meta.site_name')}</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href={`/${locale}/`}>{t(locale, 'nav.home')}</a>
+      <a href={`/${locale}/properties/`}>{t(locale, 'nav.properties')}</a>
+      <a href={`/${locale}/contact/`}>{t(locale, 'nav.contact')}</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href={otherPath} class="lang-switcher" title="Switch language">
+        {otherLocale.toUpperCase()}
+      </a>
+      <a href={`/${locale}/contact/`} class="btn btn-primary nav-cta">
+        {t(locale, 'contact.whatsapp')}
+      </a>
+    </div>
+
+    <button class="nav-toggle" aria-label="Toggle menu" id="nav-toggle">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav-mobile" id="nav-mobile">
+    <a href={`/${locale}/`}>{t(locale, 'nav.home')}</a>
+    <a href={`/${locale}/properties/`}>{t(locale, 'nav.properties')}</a>
+    <a href={`/${locale}/contact/`}>{t(locale, 'nav.contact')}</a>
+    <a href={otherPath} class="lang-switcher-mobile">
+      Switch to {otherLocale === 'en' ? 'English' : 'Français'}
+    </a>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const mobile = document.getElementById('nav-mobile');
+  toggle?.addEventListener('click', () => {
+    mobile?.classList.toggle('open');
+  });
+</script>
+
+<style>
+  .nav-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 70px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    white-space: nowrap;
+  }
+
+  .logo-icon { font-size: 1.4rem; }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    margin-left: auto;
+  }
+
+  .nav-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--color-primary); }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .lang-switcher {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 50px;
+    color: var(--color-text-muted);
+    transition: all 0.2s;
+  }
+
+  .lang-switcher:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .nav-cta { font-size: 0.85rem; padding: 0.6rem 1.25rem; }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: auto;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    padding: 1rem 1.5rem 1.5rem;
+    gap: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .nav-mobile.open { display: flex; }
+
+  .nav-mobile a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    padding: 0.5rem 0;
+  }
+
+  .lang-switcher-mobile {
+    color: var(--color-primary) !important;
+    font-weight: 600 !important;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links, .nav-actions { display: none; }
+    .nav-toggle { display: flex; }
+  }
+</style>
