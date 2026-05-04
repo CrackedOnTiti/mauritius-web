@@ -1,0 +1,9 @@
+dist/
+.astro/
+node_modules/
+*.log
+.env
+.wrangler/
+worker-configuration.d.ts
+.idea/
+.vscode/
