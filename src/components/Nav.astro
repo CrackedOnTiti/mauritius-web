@@ -10,6 +10,8 @@ const { locale } = Astro.props;
 const otherLocale = locale === 'en' ? 'fr' : 'en';
 const currentPath = Astro.url.pathname;
 const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
+const otherFlag = otherLocale === 'fr' ? '🇫🇷' : '🇬🇧';
+const otherLabel = otherLocale === 'fr' ? 'Français' : 'English';
 ---
 
 <header class="nav-header">
@@ -25,9 +27,27 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
     </nav>
 
     <div class="nav-actions">
-      <a href={otherPath} class="lang-switcher" title="Switch language">
-        {otherLocale.toUpperCase()}
+      <a href={otherPath} class="lang-switcher" title={`Switch to ${otherLabel}`} aria-label={`Switch to ${otherLabel}`}>
+        <span class="flag">{otherFlag}</span>
       </a>
+
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
       <a href={`/${locale}/contact/`} class="btn btn-primary nav-cta">
         {t(locale, 'contact.whatsapp')}
       </a>
@@ -42,9 +62,11 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
     <a href={`/${locale}/`}>{t(locale, 'nav.home')}</a>
     <a href={`/${locale}/properties/`}>{t(locale, 'nav.properties')}</a>
     <a href={`/${locale}/contact/`}>{t(locale, 'nav.contact')}</a>
-    <a href={otherPath} class="lang-switcher-mobile">
-      Switch to {otherLocale === 'en' ? 'English' : 'Français'}
-    </a>
+    <div class="mobile-bottom">
+      <a href={otherPath} class="lang-switcher-mobile">
+        {otherFlag} {otherLabel}
+      </a>
+    </div>
   </div>
 </header>
 
@@ -54,6 +76,14 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
   toggle?.addEventListener('click', () => {
     mobile?.classList.toggle('open');
   });
+
+  const themeBtn = document.getElementById('theme-toggle');
+  themeBtn?.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
 </script>
 
 <style>
@@ -61,7 +91,7 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--color-nav-bg);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
   }
@@ -76,15 +106,12 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
   .nav-logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     font-family: var(--font-heading);
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-primary);
     white-space: nowrap;
   }
-
-  .logo-icon { font-size: 1.4rem; }
 
   .nav-links {
     display: flex;
@@ -104,23 +131,49 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .lang-switcher {
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 0.3rem 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     border: 1.5px solid var(--color-border);
-    border-radius: 50px;
-    color: var(--color-text-muted);
-    transition: all 0.2s;
+    transition: border-color 0.2s;
+    font-size: 1.2rem;
+    line-height: 1;
   }
 
-  .lang-switcher:hover {
+  .lang-switcher:hover { border-color: var(--color-primary); }
+
+  .flag { line-height: 1; }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-border);
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .theme-toggle:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
   }
+
+  .icon-moon { display: none; }
+
+  [data-theme="dark"] .icon-sun { display: none; }
+  [data-theme="dark"] .icon-moon { display: block; }
 
   .nav-cta { font-size: 0.85rem; padding: 0.6rem 1.25rem; }
 
@@ -141,7 +194,6 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
     height: 2px;
     background: var(--color-text);
     border-radius: 2px;
-    transition: all 0.2s;
   }
 
   .nav-mobile {
@@ -161,9 +213,15 @@ const otherPath = currentPath.replace(`/${locale}/`, `/${otherLocale}/`);
     padding: 0.5rem 0;
   }
 
+  .mobile-bottom {
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+  }
+
   .lang-switcher-mobile {
     color: var(--color-primary) !important;
     font-weight: 600 !important;
+    font-size: 0.95rem !important;
   }
 
   @media (max-width: 768px) {
