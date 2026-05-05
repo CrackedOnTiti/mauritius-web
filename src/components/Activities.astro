@@ -32,12 +32,6 @@ const content = {
 
 const { title, subtitle, items } = content[locale];
 
-const icons = [
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
-];
 
 // Each dot: [cx, cy, image-seed]
 const dots = [
@@ -139,6 +133,7 @@ const IMG_R = 70; // hover radius in SVG units
             />
             <circle
               class="dot-hit"
+              data-index={i}
               cx={d.cx}
               cy={d.cy}
               r={IMG_R}
@@ -146,17 +141,12 @@ const IMG_R = 70; // hover radius in SVG units
           </g>
         ))}
       </svg>
+      <div id="test-box">
+        <h4 id="test-box-title"></h4>
+        <p id="test-box-desc"></p>
+      </div>
     </div>
 
-    <div class="activities-grid">
-      {items.map((item, i) => (
-        <div class="activity-card">
-          <div class="activity-icon" set:html={icons[i]}/>
-          <h3>{item.title}</h3>
-          <p>{item.desc}</p>
-        </div>
-      ))}
-    </div>
   </div>
 </section>
 
@@ -192,6 +182,44 @@ const IMG_R = 70; // hover radius in SVG units
   if (section) observer.observe(section);
 </script>
 
+<script define:vars={{ items }}>
+  const box      = document.getElementById('test-box');
+  const boxTitle = document.getElementById('test-box-title');
+  const boxDesc  = document.getElementById('test-box-desc');
+  const track    = document.getElementById('flight-track');
+  let fadeIn;
+
+  document.querySelectorAll('.dot-group').forEach((group, i) => {
+    group.addEventListener('mouseenter', () => {
+      const act = items[i];
+      if (act) {
+        boxTitle.textContent = act.title;
+        boxDesc.textContent  = act.desc;
+      }
+
+      const hit       = group.querySelector('.dot-hit');
+      const hitRect   = hit.getBoundingClientRect();
+      const trackRect = track.getBoundingClientRect();
+
+      const cx = hitRect.left - trackRect.left + hitRect.width  / 2;
+      const cy = hitRect.top  - trackRect.top  + hitRect.height / 2;
+
+      box.style.left = `${cx - 150}px`;
+      box.style.top  = `${cy + 60}px`;
+
+      fadeIn = setTimeout(() => {
+        box.style.opacity = '1';
+        box.style.transform = 'translateY(0)';
+      }, 350);
+    });
+    group.addEventListener('mouseleave', () => {
+      clearTimeout(fadeIn);
+      box.style.opacity = '0';
+      box.style.transform = 'translateY(-10px)';
+    });
+  });
+</script>
+
 <style>
   .activities-section {
     background: var(--color-bg-alt);
@@ -210,7 +238,7 @@ const IMG_R = 70; // hover radius in SVG units
     width: 100%;
     height: 130px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
     overflow: visible;
   }
 
@@ -302,48 +330,34 @@ const IMG_R = 70; // hover radius in SVG units
     clip-path: circle(70px at 50% 50%);
   }
 
-  /* --- Activity cards --- */
-
-  .activities-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  #test-box-title {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin: 0 0 0.35rem;
   }
 
-  .activity-card {
-    background: var(--color-white);
-    border-radius: var(--radius);
-    padding: 1.75rem;
-    border: 1px solid var(--color-border);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .activity-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-  }
-
-  .activity-icon {
-    color: var(--color-primary);
-    margin-bottom: 1rem;
-  }
-
-  .activity-card h3 {
-    font-size: 1.05rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .activity-card p {
-    font-size: 0.88rem;
+  #test-box-desc {
+    font-size: 0.8rem;
     color: var(--color-text-muted);
-    line-height: 1.6;
+    line-height: 1.5;
+    margin: 0;
   }
 
-  @media (max-width: 900px) {
-    .activities-grid { grid-template-columns: repeat(2, 1fr); }
+  #test-box {
+    position: absolute;
+    width: 300px;
+    height: 120px;
+    background: var(--color-white);
+    border: 2px solid var(--color-primary);
+    z-index: 1;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
   }
 
-  @media (max-width: 580px) {
-    .activities-grid { grid-template-columns: 1fr; }
-  }
+
 </style>
