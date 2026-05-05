@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c4a6e"/>
+      <stop offset="50%" stop-color="#0e7490"/>
+      <stop offset="100%" stop-color="#164e63"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.5)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" fill="url(#g)"/>
+  <!-- Sun -->
+  <circle cx="900" cy="160" r="80" fill="#f0f9ff" opacity="0.12"/>
+  <circle cx="900" cy="160" r="55" fill="#e0f2fe" opacity="0.15"/>
+  <!-- Hills -->
+  <ellipse cx="200" cy="700" rx="420" ry="240" fill="#155e75" opacity="0.5"/>
+  <ellipse cx="1050" cy="700" rx="380" ry="200" fill="#0c4a6e" opacity="0.4"/>
+  <ellipse cx="600" cy="700" rx="500" ry="180" fill="#164e63" opacity="0.35"/>
+  <!-- Pool shimmer -->
+  <rect x="380" y="320" width="220" height="130" rx="20" fill="#67e8f9" opacity="0.18"/>
+  <!-- Text -->
+  <text x="600" y="520" font-family="Georgia, serif" font-size="52" font-weight="700" fill="white" text-anchor="middle" opacity="0.95">Villa Bois Chéri</text>
+  <text x="600" y="578" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" opacity="0.75">Bois Chéri, Savanne · Luxury Villa with Ocean Views</text>
+  <rect width="1200" height="700" fill="url(#overlay)"/>
+</svg>

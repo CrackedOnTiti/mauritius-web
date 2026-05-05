@@ -9,7 +9,9 @@ interface Props {
 }
 
 const { property, locale } = Astro.props;
-const heroImage = `/images/properties/${property.slug}/${property.images[0]}`;
+const heroImage = property.images[0].startsWith('http')
+  ? property.images[0]
+  : `/images/properties/${property.slug}/${property.images[0]}`;
 ---
 
 <article class="property-card">

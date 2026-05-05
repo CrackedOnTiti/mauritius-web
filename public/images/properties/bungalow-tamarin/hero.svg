@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14532d"/>
+      <stop offset="50%" stop-color="#166534"/>
+      <stop offset="100%" stop-color="#15803d"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0.55)"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="700" fill="url(#g)"/>
+  <!-- Warm sky -->
+  <circle cx="950" cy="120" r="160" fill="#fbbf24" opacity="0.1"/>
+  <circle cx="950" cy="120" r="90" fill="#fde68a" opacity="0.1"/>
+  <!-- Canopy shapes -->
+  <ellipse cx="150" cy="300" rx="180" ry="220" fill="#15803d" opacity="0.5"/>
+  <ellipse cx="1080" cy="280" rx="200" ry="240" fill="#166534" opacity="0.5"/>
+  <ellipse cx="580" cy="260" rx="240" ry="200" fill="#14532d" opacity="0.35"/>
+  <!-- Ground -->
+  <ellipse cx="600" cy="700" rx="800" ry="180" fill="#052e16" opacity="0.5"/>
+  <!-- Warm light patch -->
+  <ellipse cx="600" cy="400" rx="300" ry="180" fill="#fbbf24" opacity="0.07"/>
+  <!-- Text -->
+  <text x="600" y="520" font-family="Georgia, serif" font-size="52" font-weight="700" fill="white" text-anchor="middle" opacity="0.95">Bungalow Tamarin</text>
+  <text x="600" y="578" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle" opacity="0.75">Tamarin, Black River · Peaceful Tropical Garden</text>
+  <rect width="1200" height="700" fill="url(#overlay)"/>
+</svg>
