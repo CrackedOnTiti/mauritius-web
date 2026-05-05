@@ -46,6 +46,14 @@ html {
   scroll-behavior: smooth;
 }
 
+[data-snap] {
+  scroll-snap-type: y mandatory;
+}
+
+[data-snap] body {
+  height: 100%;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg);
@@ -125,6 +133,10 @@ img {
 
 section {
   padding: 5rem 0;
+}
+
+[data-snap] section {
+  scroll-snap-align: start;
 }
 
 .section-header {
