@@ -137,17 +137,13 @@ const otherLabel = otherLocale === 'fr' ? 'Français' : 'English';
   .lang-switcher {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1.5px solid var(--color-border);
-    transition: border-color 0.2s;
-    font-size: 1.2rem;
+    font-size: 1.45rem;
     line-height: 1;
+    opacity: 0.85;
+    transition: opacity 0.2s, transform 0.2s;
   }
 
-  .lang-switcher:hover { border-color: var(--color-primary); }
+  .lang-switcher:hover { opacity: 1; transform: scale(1.15); }
 
   .flag { line-height: 1; }
 
