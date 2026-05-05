@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PropertyCard from '../../components/PropertyCard.astro';
+import Activities from '../../components/Activities.astro';
 import { fetchProperties } from '../../data/properties';
 import { t } from '../../i18n/translations';
 
@@ -48,6 +49,8 @@ const properties = await fetchProperties();
       </div>
     </div>
   </section>
+
+  <Activities locale={locale} />
 
   <!-- About -->
   <section class="about-section">

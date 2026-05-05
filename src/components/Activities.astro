@@ -1,0 +1,278 @@
+---
+import type { Locale } from '../i18n/translations';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const content = {
+  en: {
+    title: 'Activities',
+    subtitle: 'Discover the best of the west coast',
+    items: [
+      { title: 'Kitesurfing', desc: 'La Gaulette is one of the world\'s top kite destinations, with consistent trade winds all year.' },
+      { title: 'Snorkelling & Diving', desc: 'Explore pristine coral gardens, sea turtles, and colourful reef fish in crystal-clear lagoons.' },
+      { title: 'Hiking', desc: 'Trek the Black River Gorges National Park — waterfalls, endemic birds, and sweeping valley views.' },
+      { title: 'Whale Watching', desc: 'Between July and October, humpback and sperm whales pass through the west coast waters.' },
+    ],
+  },
+  fr: {
+    title: 'Activités',
+    subtitle: 'Découvrez le meilleur de la côte ouest',
+    items: [
+      { title: 'Kitesurf', desc: 'La Gaulette est l\'une des meilleures destinations de kite au monde, avec des alizés constants toute l\'année.' },
+      { title: 'Plongée & Snorkeling', desc: 'Explorez des jardins de coraux, tortues marines et poissons colorés dans des lagons cristallins.' },
+      { title: 'Randonnée', desc: 'Parcourez le Parc National des Gorges de la Rivière Noire — cascades, oiseaux endémiques et vues spectaculaires.' },
+      { title: 'Observation des baleines', desc: 'Entre juillet et octobre, les baleines à bosse et les cachalots longent la côte ouest de l\'île Maurice.' },
+    ],
+  },
+};
+
+const { title, subtitle, items } = content[locale];
+
+const icons = [
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18L12 4z"/><path d="M7.5 14L12 8l4.5 6"/></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c2-5 5-7 8-7s6 2 8 7"/><path d="M10 11V5"/><path d="M8 5h4"/></svg>`,
+];
+---
+
+<section class="activities-section" id="activities-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>{title}</h2>
+      <p>{subtitle}</p>
+    </div>
+
+    <div class="flight-track" id="flight-track">
+      <div class="bg-plane bg-plane-1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 24 24" fill="currentColor">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12.868 2.504l3.712 6.496h3.42a3 3 0 0 1 0 6h-3.42l-3.712 6.496a1 1 0 0 1 -.868 .504h-3a1 1 0 0 1 -.962 -1.275l1.636 -5.725h-2.26l-1.707 1.707a1 1 0 0 1 -.707 .293h-3a1 1 0 0 1 -.894 -1.447l1.776 -3.553l-1.776 -3.553a1 1 0 0 1 .894 -1.447h3a1 1 0 0 1 .707 .293l1.707 1.707h2.26l-1.636 -5.725a1 1 0 0 1 .962 -1.275h3a1 1 0 0 1 .868 .504"/>
+        </svg>
+      </div>
+      <div class="bg-plane bg-plane-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="5" height="5" viewBox="0 0 24 24" fill="currentColor">
+          <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12.868 2.504l3.712 6.496h3.42a3 3 0 0 1 0 6h-3.42l-3.712 6.496a1 1 0 0 1 -.868 .504h-3a1 1 0 0 1 -.962 -1.275l1.636 -5.725h-2.26l-1.707 1.707a1 1 0 0 1 -.707 .293h-3a1 1 0 0 1 -.894 -1.447l1.776 -3.553l-1.776 -3.553a1 1 0 0 1 .894 -1.447h3a1 1 0 0 1 .707 .293l1.707 1.707h2.26l-1.636 -5.725a1 1 0 0 1 .962 -1.275h3a1 1 0 0 1 .868 .504"/>
+        </svg>
+      </div>
+      <svg
+        class="route-svg"
+        viewBox="0 0 1200 130"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <clipPath id="line-reveal">
+            <rect id="reveal-rect" x="0" y="0" width="0" height="130">
+              <animate
+                id="line-anim"
+                attributeName="width"
+                from="0"
+                to="1200"
+                dur="3s"
+                begin="indefinite"
+                fill="freeze"
+                calcMode="spline"
+                keyTimes="0;1"
+                keySplines="0.4 0 0.2 1"
+              />
+            </rect>
+          </clipPath>
+        </defs>
+
+        <!-- Dashed wavy path -->
+        <path
+          id="flight-path"
+          d="M 80,90 C 220,30 360,150 520,80 C 680,10 820,150 960,80 C 1030,50 1090,80 1120,90"
+          fill="none"
+          stroke="var(--color-primary)"
+          stroke-width="2.5"
+          stroke-dasharray="10 8"
+          clip-path="url(#line-reveal)"
+        />
+
+        <!-- Dots along the curve (revealed with the line) -->
+        <g clip-path="url(#line-reveal)">
+          <!-- 4 equidistant dots horizontally, exactly on the path -->
+          <circle cx="288" cy="87.9" r="8" fill="var(--color-primary)"/>
+          <circle cx="496" cy="89.2" r="8" fill="var(--color-primary)"/>
+          <circle cx="704" cy="70.0" r="8" fill="var(--color-primary)"/>
+          <circle cx="912" cy="96.4" r="8" fill="var(--color-primary)"/>
+        </g>
+
+        <!-- Start pin (always visible) -->
+        <g transform="translate(80, 76)">
+          <circle cx="0" cy="-12" r="10" fill="var(--color-primary)"/>
+          <path d="M-7,-4 L0,14 L7,-4 Z" fill="var(--color-primary)"/>
+          <circle cx="0" cy="-12" r="8" fill="white"/>
+        </g>
+
+        <!-- End pin (fades in at animation end) -->
+        <g transform="translate(1120, 76)" id="pin-end" style="opacity:0">
+          <circle cx="0" cy="-12" r="10" fill="var(--color-primary)"/>
+          <path d="M-7,-4 L0,14 L7,-4 Z" fill="var(--color-primary)"/>
+          <circle cx="0" cy="-12" r="8" fill="white"/>
+        </g>
+
+      </svg>
+    </div>
+
+    <div class="activities-grid">
+      {items.map((item, i) => (
+        <div class="activity-card">
+          <div class="activity-icon" set:html={icons[i]}/>
+          <h3>{item.title}</h3>
+          <p>{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById('activities-section');
+  let triggered = false;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && !triggered) {
+        triggered = true;
+
+        const lineAnim = document.getElementById('line-anim') as SVGAnimationElement;
+        const pinEnd = document.getElementById('pin-end') as SVGGElement;
+        const track = document.getElementById('flight-track');
+
+        lineAnim?.beginElement();
+        if (track) track.classList.add('flying');
+
+        setTimeout(() => {
+          if (pinEnd) {
+            pinEnd.style.transition = 'opacity 0.35s ease';
+            pinEnd.style.opacity = '1';
+          }
+        }, 2400);
+
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.3 }
+  );
+
+  if (section) observer.observe(section);
+</script>
+
+<style>
+  .activities-section {
+    background: var(--color-bg-alt);
+    padding: 5rem 0;
+  }
+
+  .flight-track {
+    position: relative;
+    overflow: hidden;
+    margin: 2rem 0 3.5rem;
+  }
+
+  .route-svg {
+    display: block;
+    width: 100%;
+    height: 130px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bg-plane svg {
+    display: block;
+    width: 21px;
+    height: 21px;
+  }
+
+  .bg-plane {
+    position: absolute;
+    color: var(--color-primary);
+    z-index: 0;
+    animation-play-state: paused;
+  }
+
+  .flying .bg-plane { animation-play-state: running; }
+
+  .bg-plane-1 {
+    top: 18%;
+    opacity: 0.6;
+    animation:
+      fly-across-1 2.7s both 0.8s;
+  }
+
+  .bg-plane-2 {
+    top: 76%;
+    opacity: 0.6;
+    animation:
+      fly-across-2 2.7s both 0.95s;
+  }
+
+  @keyframes fly-across-1 {
+    0%   { left: 8%; opacity: 0;    animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    10%  { opacity: 0.6;            animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    50%  { left: 44%;               animation-timing-function: cubic-bezier(0, 0, 0.6, 1); }
+    100% { left: 80%; opacity: 0.6; }
+  }
+
+  @keyframes fly-across-2 {
+    0%   { left: 8%; opacity: 0;    animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    10%  { opacity: 0.6;            animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+    50%  { left: 38%;               animation-timing-function: cubic-bezier(0, 0, 0.6, 1); }
+    100% { left: 68%; opacity: 0.6; }
+  }
+
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .activity-card {
+    background: var(--color-white);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    border: 1px solid var(--color-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .activity-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+
+  .activity-icon {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+  }
+
+  .activity-card h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .activity-card p {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 900px) {
+    .activities-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 580px) {
+    .activities-grid { grid-template-columns: 1fr; }
+  }
+</style>
