@@ -37,9 +37,16 @@ const icons = [
   `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1c2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>`,
   `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18L12 4z"/><path d="M7.5 14L12 8l4.5 6"/></svg>`,
-  `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18c2-5 5-7 8-7s6 2 8 7"/><path d="M10 11V5"/><path d="M8 5h4"/></svg>`,
 ];
+
+// Each dot: [cx, cy, image-seed]
+const dots = [
+  { cx: 288,  cy: 87.9, seed: 'kite'   },
+  { cx: 496,  cy: 89.2, seed: 'coral'  },
+  { cx: 704,  cy: 70.0, seed: 'forest' },
+  { cx: 912,  cy: 96.4, seed: 'ocean'  },
+];
+const IMG_R = 70; // hover radius in SVG units
 ---
 
 <section class="activities-section" id="activities-section">
@@ -62,6 +69,7 @@ const icons = [
           <path d="M12.868 2.504l3.712 6.496h3.42a3 3 0 0 1 0 6h-3.42l-3.712 6.496a1 1 0 0 1 -.868 .504h-3a1 1 0 0 1 -.962 -1.275l1.636 -5.725h-2.26l-1.707 1.707a1 1 0 0 1 -.707 .293h-3a1 1 0 0 1 -.894 -1.447l1.776 -3.553l-1.776 -3.553a1 1 0 0 1 .894 -1.447h3a1 1 0 0 1 .707 .293l1.707 1.707h2.26l-1.636 -5.725a1 1 0 0 1 .962 -1.275h3a1 1 0 0 1 .868 .504"/>
         </svg>
       </div>
+
       <svg
         class="route-svg"
         viewBox="0 0 1200 130"
@@ -88,7 +96,6 @@ const icons = [
           </clipPath>
         </defs>
 
-        <!-- Dashed wavy path -->
         <path
           id="flight-path"
           d="M 80,90 C 220,30 360,150 520,80 C 680,10 820,150 960,80 C 1030,50 1090,80 1120,90"
@@ -99,29 +106,45 @@ const icons = [
           clip-path="url(#line-reveal)"
         />
 
-        <!-- Dots along the curve (revealed with the line) -->
-        <g clip-path="url(#line-reveal)">
-          <!-- 4 equidistant dots horizontally, exactly on the path -->
-          <circle cx="288" cy="87.9" r="8" fill="var(--color-primary)"/>
-          <circle cx="496" cy="89.2" r="8" fill="var(--color-primary)"/>
-          <circle cx="704" cy="70.0" r="8" fill="var(--color-primary)"/>
-          <circle cx="912" cy="96.4" r="8" fill="var(--color-primary)"/>
-        </g>
-
-        <!-- Start pin (always visible) -->
         <g transform="translate(80, 76)">
           <circle cx="0" cy="-12" r="10" fill="var(--color-primary)"/>
           <path d="M-7,-4 L0,14 L7,-4 Z" fill="var(--color-primary)"/>
           <circle cx="0" cy="-12" r="8" fill="white"/>
         </g>
 
-        <!-- End pin (fades in at animation end) -->
         <g transform="translate(1120, 76)" id="pin-end" style="opacity:0">
           <circle cx="0" cy="-12" r="10" fill="var(--color-primary)"/>
           <path d="M-7,-4 L0,14 L7,-4 Z" fill="var(--color-primary)"/>
           <circle cx="0" cy="-12" r="8" fill="white"/>
         </g>
 
+        {dots.map((d, i) => (
+          <g class="dot-group" style={`--dot-delay: ${(d.cx / 1200 * 3).toFixed(2)}s`}>
+            <image
+              class="dot-img"
+              href={`https://picsum.photos/seed/${d.seed}/140/140`}
+              x={d.cx - IMG_R}
+              y={d.cy - IMG_R}
+              width={IMG_R * 2}
+              height={IMG_R * 2}
+              preserveAspectRatio="xMidYMid slice"
+            />
+            <circle
+              class="dot-point"
+              data-index={i}
+              cx={d.cx}
+              cy={d.cy}
+              r="8"
+              fill="var(--color-primary)"
+            />
+            <circle
+              class="dot-hit"
+              cx={d.cx}
+              cy={d.cy}
+              r={IMG_R}
+            />
+          </g>
+        ))}
       </svg>
     </div>
 
@@ -177,8 +200,9 @@ const icons = [
 
   .flight-track {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     margin: 2rem 0 3.5rem;
+    z-index: 2;
   }
 
   .route-svg {
@@ -187,6 +211,7 @@ const icons = [
     height: 130px;
     position: relative;
     z-index: 1;
+    overflow: visible;
   }
 
   .bg-plane svg {
@@ -207,15 +232,13 @@ const icons = [
   .bg-plane-1 {
     top: 18%;
     opacity: 0.6;
-    animation:
-      fly-across-1 2.7s both 0.8s;
+    animation: fly-across-1 2.7s both 0.8s;
   }
 
   .bg-plane-2 {
     top: 76%;
     opacity: 0.6;
-    animation:
-      fly-across-2 2.7s both 0.95s;
+    animation: fly-across-2 2.7s both 0.95s;
   }
 
   @keyframes fly-across-1 {
@@ -232,6 +255,54 @@ const icons = [
     100% { left: 68%; opacity: 0.6; }
   }
 
+  /* --- Dot interaction --- */
+
+  .dot-group {
+    opacity: 0;
+  }
+
+  .flying .dot-group {
+    animation: dot-appear 0.25s ease forwards;
+    animation-delay: var(--dot-delay);
+  }
+
+  @keyframes dot-appear {
+    to { opacity: 1; }
+  }
+
+  .dot-img {
+    clip-path: circle(8px at 50% 50%);
+    transition: clip-path 0.35s ease;
+  }
+
+  .dot-point {
+    fill: var(--color-primary);
+    fill-opacity: 1;
+    stroke: var(--color-primary);
+    stroke-width: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    vector-effect: non-scaling-stroke;
+    transition: transform 0.35s ease, fill-opacity 0.35s ease, stroke-width 0.35s ease;
+  }
+
+  .dot-hit {
+    fill: transparent;
+    cursor: pointer;
+    pointer-events: all;
+  }
+
+  .dot-group:hover .dot-point {
+    transform: scale(8.75);
+    fill-opacity: 0;
+    stroke-width: 2.5;
+  }
+
+  .dot-group:hover .dot-img {
+    clip-path: circle(70px at 50% 50%);
+  }
+
+  /* --- Activity cards --- */
 
   .activities-grid {
     display: grid;
